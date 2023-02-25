@@ -99,7 +99,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:alpha="122"
-                            android:fontFamily="@font/acme"
                             android:text="The Ca[tain america"
                             android:textColor="@color/white"
                             android:textSize="28sp"

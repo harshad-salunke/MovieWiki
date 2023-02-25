@@ -62,7 +62,6 @@
                         android:id="@+id/movie_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/acme"
                         android:maxLength="60"
                         android:text="the captain"
                         android:textColor="@color/white"

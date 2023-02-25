@@ -3,9 +3,12 @@ package com.harshad.moviesapp
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var netConnectivit:LinearLayout
     private lateinit var close_internet_view:ImageView
     private lateinit var searchView: SearchView
+    private lateinit var refresh_btn:Button
+    private  lateinit var progressBar:ProgressBar
+    private lateinit var movie_count:TextView;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,6 +48,18 @@ class MainActivity : AppCompatActivity() {
         close_internet_view.setOnClickListener(View.OnClickListener {
             netConnectivit.visibility=View.GONE
         })
+
+        refresh_btn.setOnClickListener(View.OnClickListener {
+            movie_count.setText("")
+            progressBar.visibility=View.VISIBLE
+            movies.clear()
+            Main_movies.clear()
+            viewModelStore.clear();
+            recyclerMovieAdapter.updateRecyclerviewData(movies);
+            getDataFromDatabaseOrRetrofit();
+
+        })
+
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -75,6 +93,8 @@ class MainActivity : AppCompatActivity() {
             Main_movies = it.movies;
             movies.addAll(Main_movies)
             recyclerMovieAdapter.updateRecyclerviewData(movies)
+            progressBar.visibility=View.GONE
+            movie_count.setText(""+movies.size)
         }
     }
 
@@ -83,6 +103,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView=findViewById(R.id.recycler_view)
         netConnectivit=findViewById(R.id.bottom_internet_view)
         close_internet_view=findViewById(R.id.internet_close)
+        progressBar=findViewById(R.id.progressBar);
+        refresh_btn=findViewById(R.id.refresh_btn);
+        movie_count=findViewById(R.id.movie_count);
         movies= ArrayList<Movie>()
         Main_movies= ArrayList<Movie>()
         recyclerMovieAdapter=RecyclerMovieAdapter(this,movies)

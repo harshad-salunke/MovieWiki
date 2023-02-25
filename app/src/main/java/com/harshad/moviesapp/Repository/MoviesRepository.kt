@@ -22,10 +22,20 @@ private  val applicationContext:Context) {
 
     suspend fun getMovies(){
         if(NetConnectivity.checkForInternet(applicationContext)){
-            val result=apiInterface.getData();
+            val result=apiInterface.getFirstData();
+            val result2=apiInterface.getSecondData();
             if(result.body()!=null){
                 movieDataBase.movieDao().insertMovie(result.body()!!.movies)
-                mutableLiveData.postValue(result.body())
+                var firstMovies=result.body();
+                var secondMovies=result2.body();
+                if (secondMovies != null && firstMovies!=null) {
+                        firstMovies.movies.addAll(secondMovies.movies)
+                   if (mutableLiveData!=null){
+                       mutableLiveData.postValue(null)
+                   }
+                    mutableLiveData.postValue(firstMovies!!)
+                }
+
             }else{
                 Log.d("harshad","no data");
             }
